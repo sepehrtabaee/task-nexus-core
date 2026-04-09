@@ -56,6 +56,20 @@ const tools = [
     },
   },
   {
+    name: 'get_user_by_telegram_id',
+    description: 'Look up a user by their Telegram ID and return their user_id (UUID)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        telegram_id: {
+          type: 'number',
+          description: 'Telegram user ID',
+        },
+      },
+      required: ['telegram_id'],
+    },
+  },
+  {
     name: 'update_user',
     description: 'Update user information',
     inputSchema: {
@@ -272,6 +286,12 @@ async function executeTool(toolName, toolInput) {
         return {
           success: true,
           data: await userFunctions.getById(supabase, toolInput.user_id),
+        };
+
+      case 'get_user_by_telegram_id':
+        return {
+          success: true,
+          data: await userFunctions.getByTelegramId(supabase, toolInput.telegram_id),
         };
 
       case 'update_user':

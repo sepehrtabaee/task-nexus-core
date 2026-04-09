@@ -21,6 +21,17 @@ module.exports = {
     return data;
   },
 
+  async getByTelegramId(supabase, telegramId) {
+    const { data, error } = await supabase
+      .from('taskmanager_users')
+      .select('*')
+      .eq('telegram_id', telegramId)
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
   async create(supabase, { telegram_id, username, first_name, last_name }) {
     if (!telegram_id) {
       throw new Error('telegram_id is required');

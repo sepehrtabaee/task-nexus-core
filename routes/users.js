@@ -13,6 +13,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get user by Telegram ID
+router.get('/telegram/:telegram_id', async (req, res) => {
+  try {
+    const data = await userFunctions.getByTelegramId(req.supabase, req.params.telegram_id);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Get user by ID
 router.get('/:id', async (req, res) => {
   try {

@@ -53,6 +53,22 @@ function createServer() {
   );
 
   server.registerTool(
+    'get_user_by_telegram_id',
+    {
+      title: 'Get User by Telegram ID',
+      description: 'Look up a user by their Telegram ID and return their user_id (UUID)',
+      inputSchema: {
+        telegram_id: z.number().describe('Telegram user ID'),
+      },
+    },
+    async ({ telegram_id }) => {
+      const supabase = getSupabase();
+      const data = await userFunctions.getByTelegramId(supabase, telegram_id);
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
+    }
+  );
+
+  server.registerTool(
     'update_user',
     {
       title: 'Update User',
