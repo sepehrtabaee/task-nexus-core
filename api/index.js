@@ -8,6 +8,7 @@ const usersRouter = require('../routes/users');
 const listsRouter = require('../routes/lists');
 const tasksRouter = require('../routes/tasks');
 const tagsRouter = require('../routes/tags');
+const messagesRouter = require('../routes/messages');
 
 // Import MCP handler
 const { mcpHandler } = require('./mcp');
@@ -35,6 +36,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api/tasks', tasksRouter);
 app.use('/api/tags', tagsRouter);
+app.use('/api/messages', messagesRouter);
 
 // MCP endpoint — handles all MCP protocol traffic (POST only, stateless)
 app.post('/mcp', mcpHandler);
