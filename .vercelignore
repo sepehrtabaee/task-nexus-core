@@ -1,0 +1,11 @@
+mcp-server.js
+.git
+.gitignore
+node_modules
+README.md
+API.md
+MCP.md
+.env.example
+*.log
+.DS_Store
+.claude
