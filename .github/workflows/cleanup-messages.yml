@@ -1,0 +1,18 @@
+name: Cleanup Old Messages
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # 2 AM EST (UTC-5) / 7 AM UTC
+  workflow_dispatch:      # allow manual runs
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cleanup endpoint
+        run: |
+          curl --fail --silent --show-error \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.API_BASE_URL }}/api/cron/cleanup-messages"
