@@ -15,39 +15,6 @@ function createServer() {
     version: '1.0.0',
   });
 
-  // ── Users ─────────────────────────────────────────────────────────────────
-
-  server.registerTool(
-    'get_user',
-    {
-      title: 'Get User',
-      description: 'Get a user by ID',
-      inputSchema: {
-        user_id: z.string().describe('UUID of the user'),
-      },
-    },
-    async ({ user_id }) => {
-      const supabase = getSupabase();
-      const data = await userFunctions.getById(supabase, user_id);
-      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
-    }
-  );
-
-  server.registerTool(
-    'get_user_by_telegram_id',
-    {
-      title: 'Get User by Telegram ID',
-      description: 'Look up a user by their Telegram ID and return their user_id (UUID)',
-      inputSchema: {
-        telegram_id: z.number().describe('Telegram user ID'),
-      },
-    },
-    async ({ telegram_id }) => {
-      const supabase = getSupabase();
-      const data = await userFunctions.getByTelegramId(supabase, telegram_id);
-      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
-    }
-  );
 
   // ── Lists ─────────────────────────────────────────────────────────────────
 
