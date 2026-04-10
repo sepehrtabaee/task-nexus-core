@@ -38,6 +38,23 @@ app.use('/api/tasks', tasksRouter);
 app.use('/api/tags', tagsRouter);
 app.use('/api/messages', messagesRouter);
 
+// Cron: delete old messages, keep latest 10 per user
+app.post('/api/cron/cleanup-messages', async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const { error } = await supabase.rpc('cleanup_old_messages');
+    if (error) throw error;
+    res.json({ success: true, timestamp: new Date().toISOString() });
+  } catch (err) {
+    console.error('Cleanup cron error:', err);
+    res.status(500).json({ error: 'Cleanup failed', message: err.message });
+  }
+});
+
 // MCP endpoint — handles all MCP protocol traffic (POST only, stateless)
 app.post('/mcp', mcpHandler);
 
