@@ -18,25 +18,6 @@ function createServer() {
   // ── Users ─────────────────────────────────────────────────────────────────
 
   server.registerTool(
-    'create_user',
-    {
-      title: 'Create User',
-      description: 'Create a new user in the task manager',
-      inputSchema: {
-        telegram_id: z.number().describe('Unique Telegram ID for the user'),
-        username: z.string().optional().describe('Telegram @username'),
-        first_name: z.string().optional().describe('User first name'),
-        last_name: z.string().optional().describe('User last name'),
-      },
-    },
-    async (input) => {
-      const supabase = getSupabase();
-      const data = await userFunctions.create(supabase, input);
-      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
-    }
-  );
-
-  server.registerTool(
     'get_user',
     {
       title: 'Get User',
@@ -64,41 +45,6 @@ function createServer() {
     async ({ telegram_id }) => {
       const supabase = getSupabase();
       const data = await userFunctions.getByTelegramId(supabase, telegram_id);
-      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
-    }
-  );
-
-  server.registerTool(
-    'update_user',
-    {
-      title: 'Update User',
-      description: 'Update user information',
-      inputSchema: {
-        user_id: z.string().describe('UUID of the user'),
-        username: z.string().optional().describe('New username'),
-        first_name: z.string().optional().describe('New first name'),
-        last_name: z.string().optional().describe('New last name'),
-      },
-    },
-    async ({ user_id, ...fields }) => {
-      const supabase = getSupabase();
-      const data = await userFunctions.update(supabase, user_id, fields);
-      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
-    }
-  );
-
-  server.registerTool(
-    'delete_user',
-    {
-      title: 'Delete User',
-      description: 'Delete a user',
-      inputSchema: {
-        user_id: z.string().describe('UUID of the user to delete'),
-      },
-    },
-    async ({ user_id }) => {
-      const supabase = getSupabase();
-      const data = await userFunctions.delete(supabase, user_id);
       return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );
