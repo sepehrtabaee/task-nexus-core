@@ -21,12 +21,19 @@ module.exports = {
     return data;
   },
 
-  async getByListId(supabase, listId) {
-    const { data, error } = await supabase
+  async getByListId(supabase, listId, concise = false) {
+    let query = supabase
       .from('taskmanager_tasks')
       .select('*')
       .eq('list_id', listId);
 
+    if (concise) {
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      query = query.or(`is_completed.eq.false,created_at.gte.${startOfToday.toISOString()}`);
+    }
+
+    const { data, error } = await query;
     if (error) throw error;
     return data;
   },

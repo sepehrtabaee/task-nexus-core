@@ -26,7 +26,8 @@ router.get('/:id', async (req, res) => {
 // Get tasks by list ID
 router.get('/list/:list_id', async (req, res) => {
   try {
-    const data = await taskFunctions.getByListId(req.supabase, req.params.list_id);
+    const concise = req.query.concise === 'true';
+    const data = await taskFunctions.getByListId(req.supabase, req.params.list_id, concise);
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
