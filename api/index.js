@@ -14,6 +14,9 @@ const cronRouter = require('../routes/cron');
 // Import MCP handler
 const { mcpHandler } = require('./mcp');
 
+// Import auth middleware
+const { apiAuth, mcpAuth } = require('../middleware/auth');
+
 const app = express();
 
 // Middleware
@@ -32,16 +35,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// REST API Routes
-app.use('/api/users', usersRouter);
-app.use('/api/lists', listsRouter);
-app.use('/api/tasks', tasksRouter);
-app.use('/api/tags', tagsRouter);
-app.use('/api/messages', messagesRouter);
-app.use('/api/cron', cronRouter);
+// REST API Routes — protected by API_TOKEN
+app.use('/api/users', apiAuth, usersRouter);
+app.use('/api/lists', apiAuth, listsRouter);
+app.use('/api/tasks', apiAuth, tasksRouter);
+app.use('/api/tags', apiAuth, tagsRouter);
+app.use('/api/messages', apiAuth, messagesRouter);
+app.use('/api/cron', apiAuth, cronRouter);
 
-// MCP endpoint — handles all MCP protocol traffic (POST only, stateless)
-app.post('/mcp', mcpHandler);
+// MCP endpoint — protected by MCP_TOKEN
+app.post('/mcp', mcpAuth, mcpHandler);
 
 // Health check
 app.get('/health', (req, res) => {
