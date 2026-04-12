@@ -20,8 +20,8 @@ This repo is the core backend. The full project spans three repositories:
 | Repo | Role |
 |---|---|
 | **TaskNexus Core** *(this repo)* | MCP server + REST API + database layer |
-| **TaskNexus Bot** | AI agent + Telegram webhook handler *(link coming soon)* |
-| **TaskNexus Dash** | Kiosk dashboard *(link coming soon)* |
+| [**TaskNexus Bot**](https://github.com/sepehrtabaee/task-nexus-bot) | AI agent + Telegram webhook handler |
+| [**TaskNexus Dash**](https://github.com/sepehrtabaee/task-nexus-dash) | Kiosk dashboard |
 
 ---
 
@@ -231,5 +231,5 @@ The API will be available at `http://localhost:3000`.
 
 ## Related Repositories
 
-- **TaskNexus Bot** — Telegram bot + AI agent that talks to this server over MCP *(link coming soon)*
-- **TaskNexus Dash** — React kiosk dashboard that polls this API *(link coming soon)*
+- [**TaskNexus Bot**](https://github.com/sepehrtabaee/task-nexus-bot) — Telegram bot + AI agent that talks to this server over MCP
+- [**TaskNexus Dash**](https://github.com/sepehrtabaee/task-nexus-dash) — React kiosk dashboard that polls this API
