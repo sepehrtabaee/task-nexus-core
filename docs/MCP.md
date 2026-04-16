@@ -54,11 +54,20 @@ Adds a new task to a list.
 | `priority` | integer (1–5) | No | 1 = lowest, 5 = highest |
 
 #### `get_tasks`
-Returns all tasks in a list.
+Returns tasks in a list. Optionally filter by completion status.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `list_id` | string (UUID) | Yes | The list to fetch tasks from |
+| `status` | `"all"` \| `"completed"` \| `"pending"` | No | Filter by completion status (default: `"all"`) |
+
+#### `get_tasks_by_user`
+Returns tasks across all lists owned by a user. Optionally filter by completion status.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `user_id` | string (UUID) | Yes | The user whose tasks to fetch |
+| `status` | `"all"` \| `"completed"` \| `"pending"` | No | Filter by completion status (default: `"all"`) |
 
 #### `update_task`
 Updates one or more fields on an existing task. All fields except `task_id` are optional — only include what you want to change.

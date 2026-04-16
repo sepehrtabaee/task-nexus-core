@@ -21,7 +21,7 @@ module.exports = {
     return data;
   },
 
-  async getByListId(supabase, listId, concise = false) {
+  async getByListId(supabase, listId, { concise = false, status = 'all' } = {}) {
     let query = supabase
       .from('taskmanager_tasks')
       .select('*')
@@ -31,6 +31,39 @@ module.exports = {
       const startOfToday = new Date();
       startOfToday.setHours(0, 0, 0, 0);
       query = query.or(`is_completed.eq.false,created_at.gte.${startOfToday.toISOString()}`);
+    }
+
+    if (status === 'completed') {
+      query = query.eq('is_completed', true);
+    } else if (status === 'pending') {
+      query = query.eq('is_completed', false);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return data;
+  },
+
+  async getByUserId(supabase, userId, { status = 'all' } = {}) {
+    const { data: lists, error: listsError } = await supabase
+      .from('taskmanager_lists')
+      .select('id')
+      .eq('user_id', userId);
+
+    if (listsError) throw listsError;
+    if (!lists.length) return [];
+
+    const listIds = lists.map((l) => l.id);
+
+    let query = supabase
+      .from('taskmanager_tasks')
+      .select('*')
+      .in('list_id', listIds);
+
+    if (status === 'completed') {
+      query = query.eq('is_completed', true);
+    } else if (status === 'pending') {
+      query = query.eq('is_completed', false);
     }
 
     const { data, error } = await query;

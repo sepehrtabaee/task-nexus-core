@@ -110,14 +110,32 @@ function createServer() {
     'get_tasks',
     {
       title: 'Get Tasks',
-      description: 'Get all tasks in a list',
+      description: 'Get tasks in a list. Use the status filter to return all, only completed, or only pending tasks.',
       inputSchema: {
         list_id: z.string().describe('UUID of the list'),
+        status: z.enum(['all', 'completed', 'pending']).optional().describe('Filter by completion status — "all" (default), "completed", or "pending"'),
       },
     },
-    async ({ list_id }) => {
+    async ({ list_id, status = 'all' }) => {
       const supabase = getSupabase();
-      const data = await taskFunctions.getByListId(supabase, list_id);
+      const data = await taskFunctions.getByListId(supabase, list_id, { status });
+      return { content: [{ type: 'text', text: JSON.stringify(data) }] };
+    }
+  );
+
+  server.registerTool(
+    'get_tasks_by_user',
+    {
+      title: 'Get Tasks by User',
+      description: 'Get tasks across all lists owned by a user. Use the status filter to return all, only completed, or only pending tasks.',
+      inputSchema: {
+        user_id: z.string().describe('UUID of the user'),
+        status: z.enum(['all', 'completed', 'pending']).optional().describe('Filter by completion status — "all" (default), "completed", or "pending"'),
+      },
+    },
+    async ({ user_id, status = 'all' }) => {
+      const supabase = getSupabase();
+      const data = await taskFunctions.getByUserId(supabase, user_id, { status });
       return { content: [{ type: 'text', text: JSON.stringify(data) }] };
     }
   );

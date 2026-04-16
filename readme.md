@@ -105,7 +105,8 @@ The server exposes the following tools to AI agents over the MCP protocol at `PO
 | Tool | Description | Required Inputs | Optional Inputs |
 |---|---|---|---|
 | `create_task` | Add a new task to a list | `list_id`, `title` | `description`, `due_date` (ISO 8601), `priority` (1–5) |
-| `get_tasks` | Retrieve all tasks in a list | `list_id` | — |
+| `get_tasks` | Retrieve tasks in a list | `list_id` | `status` (`"all"` / `"completed"` / `"pending"`) |
+| `get_tasks_by_user` | Retrieve tasks across all lists for a user | `user_id` | `status` (`"all"` / `"completed"` / `"pending"`) |
 | `update_task` | Update any field on a task, including marking complete | `task_id` | `title`, `description`, `due_date`, `priority`, `is_completed` |
 | `delete_task` | Delete a task | `task_id` | — |
 
@@ -121,7 +122,7 @@ Full REST documentation is in [docs/API.md](docs/API.md). Summary of available r
 
 - `GET|POST|PUT|DELETE /api/users` — user management
 - `GET|POST|PUT|DELETE /api/lists` — list management
-- `GET|POST|PUT|DELETE /api/tasks` — task management
+- `GET|POST|PUT|DELETE /api/tasks` — task management (filter by `status=all|completed|pending`; `GET /api/tasks/user/:user_id` for cross-list queries)
 - `GET|POST|DELETE /api/tags` — task tagging
 - `/api/messages` — message log
 - `/api/cron` — scheduled cleanup trigger

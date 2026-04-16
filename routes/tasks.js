@@ -24,10 +24,24 @@ router.get('/:id', async (req, res) => {
 });
 
 // Get tasks by list ID
+// Optional query params: concise=true, status=all|completed|pending
 router.get('/list/:list_id', async (req, res) => {
   try {
     const concise = req.query.concise === 'true';
-    const data = await taskFunctions.getByListId(req.supabase, req.params.list_id, concise);
+    const status = req.query.status || 'all';
+    const data = await taskFunctions.getByListId(req.supabase, req.params.list_id, { concise, status });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get tasks by user ID across all lists
+// Optional query param: status=all|completed|pending
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const status = req.query.status || 'all';
+    const data = await taskFunctions.getByUserId(req.supabase, req.params.user_id, { status });
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });

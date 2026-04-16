@@ -115,9 +115,27 @@ GET /api/tasks/:id
 GET /api/tasks/list/:list_id
 ```
 
-Supports an optional `concise=true` query param to return a trimmed-down response:
+Optional query params:
+- `status=all|completed|pending` — filter by completion status (default: `all`)
+- `concise=true` — return a trimmed-down response (excludes completed tasks older than today)
+
 ```
+GET /api/tasks/list/:list_id?status=pending
+GET /api/tasks/list/:list_id?status=completed
 GET /api/tasks/list/:list_id?concise=true
+```
+
+#### Get tasks by user ID (across all lists)
+```
+GET /api/tasks/user/:user_id
+```
+
+Returns all tasks across every list owned by the user. Supports the same `status` filter:
+
+```
+GET /api/tasks/user/:user_id?status=pending
+GET /api/tasks/user/:user_id?status=completed
+GET /api/tasks/user/:user_id?status=all
 ```
 
 #### Create task
