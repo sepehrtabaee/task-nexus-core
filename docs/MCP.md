@@ -17,7 +17,7 @@ Creates a new task list owned by a user.
 | `name` | string | Yes | List name, e.g. `"Work"`, `"Home"` |
 
 #### `get_lists`
-Returns all lists belonging to a user.
+Returns all lists belonging to a user. Each list includes a `pending_task_count` field — the number of incomplete tasks (`is_completed = false`) in that list.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|

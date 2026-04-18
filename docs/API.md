@@ -55,6 +55,19 @@ DELETE /api/users/:id
 
 ## Lists `/api/lists`
 
+All list-returning endpoints include a `pending_task_count` field on each list — the number of incomplete tasks it contains (tasks where `is_completed` is `false`).
+
+Example response:
+```json
+{
+  "id": "uuid-here",
+  "user_id": "uuid-here",
+  "name": "Work",
+  "created_at": "2025-06-01T09:00:00Z",
+  "pending_task_count": 4
+}
+```
+
 #### Get all lists
 ```
 GET /api/lists

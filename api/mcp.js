@@ -39,7 +39,7 @@ function createServer() {
     'get_lists',
     {
       title: 'Get Lists',
-      description: 'Get all lists for a user',
+      description: 'Get all lists for a user. Each list includes a pending_task_count field with the number of incomplete tasks (is_completed = false) in that list.',
       inputSchema: {
         user_id: z.string().describe('UUID of the user'),
       },

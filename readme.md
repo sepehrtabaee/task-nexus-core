@@ -96,7 +96,7 @@ The server exposes the following tools to AI agents over the MCP protocol at `PO
 | Tool | Description | Required Inputs |
 |---|---|---|
 | `create_list` | Create a new task list for a user | `user_id`, `name` |
-| `get_lists` | Get all lists belonging to a user | `user_id` |
+| `get_lists` | Get all lists belonging to a user (each list includes a `pending_task_count` — incomplete tasks only) | `user_id` |
 | `update_list` | Rename a list | `list_id`, `name` |
 | `delete_list` | Delete a list and all its tasks | `list_id` |
 
