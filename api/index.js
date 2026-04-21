@@ -1,8 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { createClient } = require('@supabase/supabase-js');
-
 // Import routes
 const usersRouter = require('../routes/users');
 const listsRouter = require('../routes/lists');
@@ -23,19 +21,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-);
-
-// Make supabase available to routes
-app.use((req, res, next) => {
-  req.supabase = supabase;
-  next();
-});
-
-// REST API Routes — protected by API_TOKEN
+// REST API Routes — protected by Supabase JWT
 app.use('/api/users', apiAuth, usersRouter);
 app.use('/api/lists', apiAuth, listsRouter);
 app.use('/api/tasks', apiAuth, tasksRouter);
