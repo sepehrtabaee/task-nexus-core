@@ -13,7 +13,7 @@ const cronRouter = require('../routes/cron');
 const { mcpHandler } = require('./mcp');
 
 // Import auth middleware
-const { apiAuth, mcpAuth } = require('../middleware/auth');
+const { apiOrBotAuth, mcpAuth } = require('../middleware/auth');
 
 const app = express();
 
@@ -21,13 +21,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// REST API Routes — protected by Supabase JWT
-app.use('/api/users', apiAuth, usersRouter);
-app.use('/api/lists', apiAuth, listsRouter);
-app.use('/api/tasks', apiAuth, tasksRouter);
-app.use('/api/tags', apiAuth, tagsRouter);
-app.use('/api/messages', apiAuth, messagesRouter);
-app.use('/api/cron', apiAuth, cronRouter);
+// REST API Routes — protected by Supabase JWT or BOT_TOKEN
+app.use('/api/users', apiOrBotAuth, usersRouter);
+app.use('/api/lists', apiOrBotAuth, listsRouter);
+app.use('/api/tasks', apiOrBotAuth, tasksRouter);
+app.use('/api/tags', apiOrBotAuth, tagsRouter);
+app.use('/api/messages', apiOrBotAuth, messagesRouter);
+app.use('/api/cron', apiOrBotAuth, cronRouter);
 
 // MCP endpoint — protected by MCP_TOKEN
 app.post('/mcp', mcpAuth, mcpHandler);

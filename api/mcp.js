@@ -180,11 +180,12 @@ function createServer() {
   return server;
 }
 
-// Create Supabase client on every request (serverless-safe)
+// MCP is bot-only (protected by MCP_TOKEN), so use the service role key
+// to bypass RLS and manage data across all users.
 function getSupabase() {
   return createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 }
 
