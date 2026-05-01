@@ -31,35 +31,38 @@ This repo is the core backend. The full project spans three repositories:
 graph TD
     %% Users and Agents
     User((User))
-    Agent([AI Agent])
+    Agent([LangChain + LangGraph Agent])
 
     %% Interfaces
-    subgraph "Interfaces (Frontend)"
+    subgraph Interfaces["Interfaces (Frontend)"]
         TG[Telegram Bot]
         DB[React Dashboard]
     end
 
     %% Core System
-    subgraph "Core Ecosystem"
+    subgraph Core["Core Ecosystem"]
         API[MCP/API Server]
-        SQL[(Database)]
+        SQL[(Supabase Postgres)]
     end
 
     %% Scheduled Jobs
-    subgraph "Scheduled Jobs"
-        CRON[Cleanup Cron]
-    end
+    CRON[Cleanup Cron]
 
-    %% Connections
+    %% User entry points
     User -->|Sends Telegram message| TG
+    User -.->|Views & edits via kiosk| DB
+
+    %% Telegram path
     TG -->|Forwards message via webhook| Agent
     Agent -->|MCP Protocol| API
 
+    %% Dashboard writes via the API, live updates stream from Supabase
+    DB <-->|writes via API · live updates from Supabase| API
+
+    %% Core
     API <-->|Query/Write| SQL
 
-    DB -->|Polls every 5s| API
-    User -.->|Views Kiosk| DB
-
+    %% Cron
     CRON -->|DELETE old messages| API
 
     %% Styling
@@ -71,6 +74,8 @@ graph TD
     style CRON fill:#b45309,color:#fff,stroke:#92400e,stroke-width:1px
     style User fill:#1e293b,color:#e2e8f0,stroke:#334155,stroke-width:2px
 ```
+
+The AI agent that drives the Telegram bot is built on **LangChain** (provider-agnostic tool-calling loop over Claude or GPT) with a **LangGraph** sub-workflow for breaking high-level goals into subtasks (plan → refine → persist). The kiosk dashboard subscribes to **Supabase Realtime** instead of polling, so changes made via the bot show up instantly. See [**TaskNexus Bot**](https://github.com/sepehrtabaee/task-nexus-bot) for the full agent breakdown.
 
 ---
 
@@ -233,4 +238,4 @@ The API will be available at `http://localhost:3000`.
 ## Related Repositories
 
 - [**TaskNexus Bot**](https://github.com/sepehrtabaee/task-nexus-bot) — Telegram bot + AI agent that talks to this server over MCP
-- [**TaskNexus Dash**](https://github.com/sepehrtabaee/task-nexus-dash) — React kiosk dashboard that polls this API
+- [**TaskNexus Dash**](https://github.com/sepehrtabaee/task-nexus-dash) — React kiosk dashboard that subscribes to this API's database via Supabase Realtime
